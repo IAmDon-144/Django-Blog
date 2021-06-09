@@ -1,2 +1,2 @@
 # Django-Blog
- result -- thebloghen.com
+ result -- https://thebloghen.com/
