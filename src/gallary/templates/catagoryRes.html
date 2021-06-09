@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+
+
+
+<title>{% block title %}-Category-{{title}}{% endblock title%}</title>
+
+
+
+{% block content %}
+
+<style>
+  @media only screen and (max-width: 767px) {
+    .ui.container {
+      margin-top: 100px;
+    }
+    .card-img-bottom {
+      height: 280px;
+    }
+    
+  }
+  .ui.form input[type=text]{
+    margin: 0px 0px 16px 14px;
+    width: 80%;
+  }
+</style>
+<h1>{{title|slugify}}</h1>
+<hr>
+<br>
+<br>
+{% for post in posts %}
+ {% if post.image and post.content %}
+
+
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+
+      <h2 class="card-title">{{post.title}}</h2>
+      <hr />
+      <div class="col-sm-7">
+        <p class="card-text">
+          <small class="text-muted">{{post.created}}</small>
+        </p>
+        <div>
+          <img
+            id="image_id"
+            style="display: inline-block"
+            src="{{post.image.url}}"
+            class="card-img-bottom"
+            height="450"
+          />
+        </div>
+        <br />
+        <form
+          action="{% url 'like-unlike-post' %}"
+          method="POST"
+          class="like-form"
+          id="{{post.id}}"
+        >
+          {% csrf_token %}
+          <input
+            type="hidden"
+            id="likeId"
+            name="post_like_id"
+            value="{{post.id}}"
+          />
+          <div class="ui labeled button" tabindex="0">
+            <button class="ui red button like-btn{{post.id}}" type="submit">
+              <!-- <i class="heart icon"></i> -->
+
+              {% if request.user not in post.liked.all %} Like {% else %} Unlike
+              {% endif %}
+            </button>
+            <a
+              id="likesCount"
+              class="ui basic red left pointing label like-count{{post.id}}"
+            >
+              {{post.num_likes}}
+            </a>
+          </div>
+
+          <div class="ui labeled button" tabindex="0">
+            <div class="ui basic blue button">
+              <i class="comment icon"></i>
+            </div>
+            <a class="ui basic left pointing blue label">
+              {{post.CommentCount}}
+            </a>
+          </div>
+        </form>
+      </div>
+      <div class="col-sm-5">
+        <br />
+        <br />
+
+        <p id="content" class="card-text" style="text-align: justify">
+          {{post.content|slice:1550|safe|urlize}}.......
+        </p>
+        <a href="{% url 'post-reading' post.id post.title|slugify %}"><input
+        
+          type="button"
+          class="btn btn-info"
+          name="continueReading"
+          id=""
+          value="Continue Reading"
+        /></a>
+        <a href="{% url 'post-reading' post.id post.title|slugify %}"><input
+          type="button"
+          class="btn btn-info"
+          name="seeCommnets"
+          id=""
+          value="See Comments"
+        /></a>
+      </div>
+    </div>
+  
+  </div>
+  <div >
+    <form  id="{{post.id}}" action="{% url 'save-comment' post.id post.title|slugify %}" method="POST" class='ui form commForm2' >
+      {% csrf_token %}
+      <input placeholder="Add Your Comment" class="post_id" type="text" name="post_id" id="in{{post.id}}">
+
+      <button type="submit" name="submit_c_form" class="ui primary button">Add Comment Publicly</button>
+  </form>
+</div>
+</div>
+<br />
+<br />
+<br />
+<br />
+
+
+{% elif post.image %}
+
+<div class="card">
+  <div class="card-body">
+
+      <h2 class="card-title">{{post.title}}</h2>
+      <hr />
+        <p class="card-text">
+          <small class="text-muted">{{post.created}}</small>
+        </p>
+        <div>
+          <img
+            id="image_id"
+            style="display: inline-block"
+            src="{{post.image.url}}"
+            class="card-img-bottom"
+            height="750"
+          />
+        </div>
+        <br>
+
+
+        <form
+          action="{% url 'like-unlike-post' %}"
+          method="POST"
+          class="like-form"
+          id="{{post.id}}"
+        >
+          {% csrf_token %}
+          <input
+            type="hidden"
+            id="likeId"
+            name="post_like_id"
+            value="{{post.id}}"
+          />
+          <div class="ui labeled button" tabindex="0">
+            <button class="ui red button like-btn{{post.id}}" type="submit">
+              <!-- <i class="heart icon"></i> -->
+
+              {% if request.user not in post.liked.all %} Like {% else %} Unlike
+              {% endif %}
+            </button>
+            <a
+              id="likesCount"
+              class="ui basic red left pointing label like-count{{post.id}}"
+            >
+              {{post.num_likes}}
+            </a>
+          </div>
+
+          <div class="ui labeled button" tabindex="0">
+            <div class="ui basic blue button">
+              <i class="comment icon"></i>
+            </div>
+            <a class="ui basic left pointing blue label">
+              {{post.CommentCount}}
+            </a>
+          </div>
+
+
+
+          <a href="{% url 'post-reading' post.id post.title|slugify %}"><input
+            type="button"
+            class="btn btn-info"
+            name="seeCommnets"
+            id=""
+            value="See Comments"
+          /></a>
+      </form>
+
+
+
+  
+  </div>
+  <div >
+    <form  id="{{post.id}}" action="{% url 'save-comment' post.id post.title|slugify %}" method="POST" class='ui form commForm2' >
+      {% csrf_token %}
+      <input placeholder="Add Your Comment" class="post_id" type="text" name="post_id" id="in{{post.id}}">
+
+      <button type="submit" name="submit_c_form" class="ui primary button">Add Comment Publicly</button>
+  </form>
+</div>
+</div>
+
+
+
+
+
+{% else %}
+
+<div class="card">
+  <div class="card-body">
+    <h2 class="card-title">{{post.title}}</h2>
+    <hr />
+    <p class="card-text">
+      <small class="text-muted">{{post.created}}</small>
+    </p>
+    <br>
+    <p id="content" class="card-text" style="text-align: justify">
+      {{post.content|slice:1550|safe|urlize}}.......
+    </p>
+    
+    <a href="{% url 'post-reading' post.id post.title|slugify %}"><input
+
+    type="button"
+    class="btn btn-info"
+    name="continueReading"
+    id=""
+    value="Continue Reading"
+  /></a>
+  <a href="{% url 'post-reading' post.id post.title|slugify %}"><input
+    type="button"
+    class="btn btn-info"
+    name="seeCommnets"
+    id=""
+    value="See Comments"
+  /></a>
+  <br>
+  <br>
+
+
+    <form
+    action="{% url 'like-unlike-post' %}"
+    method="POST"
+    class="like-form"
+    id="{{post.id}}"
+  >
+    {% csrf_token %}
+    <input
+      type="hidden"
+      id="likeId"
+      name="post_like_id"
+      value="{{post.id}}"
+    />
+    <div class="ui labeled button" tabindex="0">
+      <button class="ui red button like-btn{{post.id}}" type="submit">
+        <!-- <i class="heart icon"></i> -->
+
+        {% if request.user not in post.liked.all %} Like {% else %} Unlike
+        {% endif %}
+      </button>
+      <a
+        id="likesCount"
+        class="ui basic red left pointing label like-count{{post.id}}"
+      >
+        {{post.num_likes}}
+      </a>
+    </div>
+
+    <div class="ui labeled button" tabindex="0">
+      <div class="ui basic blue button">
+        <i class="comment icon"></i>
+      </div>
+      <a class="ui basic left pointing blue label">
+        {{post.CommentCount}}
+      </a>
+    </div>
+  </form>
+  
+  
+  
+
+  </div>
+  <div >
+    <form  id="{{post.id}}" action="{% url 'save-comment' post.id post.title|slugify %}" method="POST" class='ui form commForm2' >
+      {% csrf_token %}
+      <input placeholder="Add Your Comment" class="post_id" type="text" name="post_id" id="in{{post.id}}">
+
+      <button type="submit" name="submit_c_form" class="ui primary button">Add Comment Publicly</button>
+  </form>
+  </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+
+{% endif %} {% endfor %} {% include 'ajax.html' %} {% endblock content %}

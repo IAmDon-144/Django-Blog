@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+
+{% block meta %}
+
+<meta name="keywords" content="blog,blog post,image,videos,image post,how to,blog hunger">
+
+<meta name="description" content="
+This is a blog post site. This site talks about various kinds of topic and issues.
+No user can generate or upload any content or videos, but can express themselves by giving like and do comment on any post. The authority has a right to delete any kind of comment that violate our policy.
+ ">
+
+{% endblock meta %}
+  
+<title>{% block title %}About-{% endblock title%}</title>
+
+
+
+
+
+
+ {% block content %} 
+
+ <div class="card">
+     <div class="card-body">
+         
+         <h1 class="text-center">About</h1>
+     </div>
+     
+ </div>
+<br>
+<br>
+
+<h1 style="text-align: center;">This is a blogging website. This website mainly talks about current issues and recent incidents all over the world. Though it is a blogging website, it is different from other blogging websites. It holds some special features or characteristics. It is  unparalleled in its own way.  The website works in different categories.Like
+    <br>
+    <br>
+    {% for category in catagorys %}
+    <li><span>{{category}} &nbsp;</span><a href="{% url 'catagory-post' category.id category.name %}">Check It</a></li>
+    <br>
+    {% endfor %}
+    <br>
+
+    
+    
+    
+    
+    There are a number of categories in the website. Different categories deals  with different type of issues or contents. The content of one category will vary from the content of other categories. The categories are type based. In some sectors, there may have subcategories too. Subcategories work under main categories. The website is different from other blogging website in the feature of user-generated posts also. In this website, there is no system for user-generated posts like other websites. The generating system of this website is admin and editor based. There are a few admins and editors to generate posts. Only admins and editors can generate and modify the posts as per their preferences. The content are source based or personal. Some of the contents are our personal opinion. Hurting anyone's belief is not our resolution. There is no intention of spreading any type of hatred or abomination. So, the authority is not responsible for any situation.
+<br>
+<br>
+<br>
+</h1>
+
+
+
+ {% endblock content %}

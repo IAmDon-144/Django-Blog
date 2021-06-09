@@ -1,0 +1,86 @@
+{% extends 'base.html' %} 
+
+<title>{% block title %}Videos-{% endblock title%}</title>
+{% block content %}
+
+
+<div style="display: none;" id="create_video" >
+    <form action="" class="ui form" method="POST">
+        {% csrf_token %}
+        {{vdoForm.as_p}}
+        <button class="ui basic blue button">Create Video</button>
+    </form>
+    
+
+
+</div>
+
+{% if vdos %}
+<h1>All Videos</h1>
+{% else %}
+<h1>No videos</h1>
+{% endif %}
+
+{% for vdo in vdos %}
+<a href="{% url 'single-video' vdo.id vdo.title|slugify %}">
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="{{vdo.video}}" allowfullscreen></iframe>
+                  </div>
+                  <br>
+
+
+            </div>
+            <div class="col-sm-8">
+                
+                <h3>{{vdo.title}}</h3>
+                {% if request.user.is_staff%}
+                <br> 
+
+                <a href="{% url 'edit-videos' vdo.id %}"><button  class="btn btn-info editButton" >Edit</button></a>
+                <a href="{% url 'delete-videos' vdo.id %}"><button class="btn btn-danger Delete">Delete</button></a>
+                <br>
+
+                {% endif %}
+                <br>
+                <p style="text-align: justify;">{{vdo.content|slice:500}}....</p>
+                
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</a>
+<br>
+<br>
+<br>
+{% endfor %}
+{% endblock content %}
+
+
+
+{% block scripts%}
+
+<script>
+    $(document).ready(function () {
+      $("#plusVdo").click(function () {
+        $("#create_video").toggle(150);
+        $('html,body').scrollTop(0);
+  
+        $("#iconVdo").toggleClass('minus icon')
+        $("#iconVdo").toggleClass('plus icon')
+  
+  
+      });
+    });
+  </script>
+
+
+
+
+
+{% endblock scripts%}

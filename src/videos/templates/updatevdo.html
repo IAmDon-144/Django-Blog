@@ -1,0 +1,12 @@
+{% extends 'base.html' %} 
+
+
+{% block content %}
+
+<form action="" method="POST" class="ui form">
+    {% csrf_token %}
+    {{v_form.as_p}}
+    <button class="ui button primary ">Update</button>
+</form>
+
+{% endblock content %}

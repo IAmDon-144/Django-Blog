@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Sign In" %}</h1>
+
+{% get_providers as socialaccount_providers %}
+
+{% if socialaccount_providers %}
+<p>{% blocktrans with site.name as site_name %}Please sign in with one
+of your existing third party accounts. Or, <a href="{{ signup_url }}"><button class="ui button secondary">sign up</button> </a>
+for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+
+<style>
+
+/* .imageSocial{
+  background-image: url("{% static 'gallary/image/signin.png' %}");
+  background-repeat: no-repeat;
+  height: 50px;
+} */
+
+</style>
+
+
+
+
+
+  <a href="" class="logo"><img src="{% static 'gallary/image/signin.png' %}" alt=""></a>
+
+
+
+  <ul class="socialaccount_providers google_nab" style="display: none;" >
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </ul>
+
+
+
+
+
+
+  <div class="login-or">{% trans 'or' %}</div>
+
+
+
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% else %}
+<p>{% blocktrans %}If you have not created an account yet, then please
+<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+{% endif %}
+
+
+<div class="ui grid">
+
+  <div class="six wide column">
+
+    <form class="login ui form" method="POST" action="">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="hidden" value="Login">
+        <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+      <button class="ui button secondary" type="submit">{% trans "Sign In" %}</button>
+    </form>
+    
+
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+    
+
+{% block scripts %}
+
+<script>
+
+  $(document).ready(function(){
+
+    $('.logo').click(function(){
+
+
+      let url = $("body > div > ul > li > a").attr('href')
+      $('.logo').attr('href',url)
+    })
+  })
+</script>
+
+
+{% endblock scripts %}
+

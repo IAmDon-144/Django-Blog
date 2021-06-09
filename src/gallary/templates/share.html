@@ -1,0 +1,114 @@
+{% load social_share%}
+<br />
+
+<div style="display: none" class="card" id="shareCard">
+  <div class="card-body">
+
+  <a id="facebook" target="_blank" >
+    <button class="ui circular facebook icon button">
+      <i class="facebook icon"></i>
+    </button>
+  </a>
+    
+  <a id="twitter" target="_blank" >
+    <button class="ui circular twitter icon button">
+      <i class="twitter icon"></i>
+    </button>
+  </a>
+
+    <a id="linkedin" target="_blank" >
+      <button class="ui circular linkedin icon button">
+      <i class="linkedin icon"></i>
+    </button>
+  </a>
+  <a id="pinterest" target="_blank" >
+    <button class="ui circular pinterest icon button">
+      <i class="pinterest icon"></i>
+    </button>
+  </a>
+  <a id="whatsapp" target="_blank" >
+    <button class="ui circular whatsapp icon green button">
+      <i class="whatsapp icon"></i>
+    </button>
+  </a>
+  <a id="telegram" target="_blank" >
+    <button class="ui circular telegram icon primary button">
+      <i class="telegram icon"></i>
+    </button>
+  </a>
+  <a id="reddit" target="_blank" >
+    <button class="ui circular reddit icon orange  button">
+      <i class="reddit icon"></i>
+    </button>
+  </a>
+
+
+
+
+    <br />
+    <br />
+
+    <input
+      style="height: 30px; width: 60%"
+      class="ui labeled input"
+      name="shareinput"
+      id="shareId"
+    />
+    <button onclick="copyFunction()" class="ui button">Copy</button>
+  </div>
+</div>
+
+
+<script>
+  function copyFunction() {
+    var copyText = document.getElementById("shareId");
+    copyText.select();
+    document.execCommand("copy");
+  }
+
+  $(document).ready(function () {
+    const webName = 'ImageHut'
+    let loc = window.location.href
+    let postTitle = '{{post.title}}'
+
+    
+
+
+    $('#twitter').attr('href',
+    `https://twitter.com/share?url=${[loc]}&text=${[postTitle]}&via=${[webName]}`
+    )
+    $('#linkedin').attr('href',
+    `https://www.linkedin.com/sharing/share-offsite/?url=${loc}`
+    )
+    $('#whatsapp').attr('href',
+    `https://api.whatsapp.com/send?text=${[postTitle]} ${[loc]}`
+    )
+
+    '{% if post.image %}'
+    $('#pinterest').attr('href',
+    `https://pinterest.com/pin/create/bookmarklet/?media=${[encodeURI('{{post.image.url}}')]}&url=${[loc]}&description=${[postTitle]}`
+    
+    )
+    '{% else %}'
+    $('#pinterest').attr('href',
+    `https://pinterest.com/pin/create/bookmarklet/?&url=${[loc]}&description=${[postTitle]}`
+    
+    )
+    '{% endif %}'
+    
+    $('#telegram').attr('href',
+    `https://telegram.me/share/url?url=${loc}&text=${postTitle}`
+    )
+    $('#facebook').attr('href',
+    `https://www.facebook.com/sharer.php?u=${[loc]}`
+    )
+    $('#reddit').attr('href',
+    `https://reddit.com/submit?url=${[loc]}&title=${[postTitle]}`
+    )
+
+
+
+
+
+  });
+</script>

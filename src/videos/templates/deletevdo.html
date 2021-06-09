@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Are You Sure to Delete This Post?</h1>
+<div class="card">
+    <div class="card-body">
+
+        <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="{{deleted_vdo.video}}" allowfullscreen></iframe>
+          </div>
+          <form action="" method="POST">
+              {% csrf_token %}
+
+            <a href="{% url 'delete-videos' deleted_vdo.id %}"><button class="btn btn-danger " name="confirm_delete_btn" type="submit">Yes! Delete It</button></a>
+            <button class="btn btn-info" name="nokeepit" type="text">No,Keep it</button>
+          </form>
+ 
+
+
+    </div>
+</div>
+
+{% endblock content %}

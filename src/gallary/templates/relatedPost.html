@@ -1,0 +1,67 @@
+<div class="card">
+  <div class="card-body">
+
+
+      
+{% if len_of_relpost > 2 %}
+    <h1>Related Post</h1>
+
+
+
+    <div class="card-group">
+        {% for relpost in rellist %}
+        <a href="{% url 'post-reading' relpost.id relpost.title|slugify %}">
+          <div class="card mx-1">
+            {% if relpost.image %}
+            <img src="{{relpost.image.url}}" height="150px" class="card-img-top" alt="..." />
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{relpost.title}}</h5>
+              <p class="card-text">{{relpost.content|slice:150|safe|urlize}}
+                {% if relpost.content %}
+                ....
+                {% endif %}
+              </p>
+              <p class="card-text">
+                <small class="text-muted">{{relpost.created}}</small>
+              </p>
+            </div>
+        </a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <h1>Recommended Post</h1>
+
+        <div class="card-group">
+            {% for relpost in newestPost %}
+            <a href="{% url 'post-reading'  relpost.id relpost.title|slugify %}">
+              <div class="card mx-1">
+                {% if relpost.image %}
+                <img src="{{relpost.image.url}}" height="150px" class="card-img-top" alt="..." />
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{relpost.title}}</h5>
+                  <p class="card-text">{{relpost.content|slice:150|safe|urlize}}
+                    {% if relpost.content %}
+                    ....
+                    {% endif %}
+                  </p>
+                  <p class="card-text">
+                    <small class="text-muted">{{relpost.created}}</small>
+                  </p>
+                </div>
+            </a>
+              </div>
+              {% endfor %}
+            </div>
+
+        {% endif %}
+
+
+
+  </div>
+</div>
+<br>
+
+

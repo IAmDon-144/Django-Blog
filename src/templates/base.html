@@ -1,0 +1,77 @@
+{% load static %}
+{% url 'newsfeed' as path_to_newsfeed %}
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% block meta %}
+    {% endblock meta %}
+
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+    <!--Custom css-->
+ 
+
+
+    <!-- semantic UI -->
+    <link rel="stylesheet" type='text/css' href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <link rel="stylesheet" href="{% static 'gallary/css/bootstrap.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'gallary/css/style.css' %}"> -->
+    <link rel="stylesheet" type='text/css' href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+    
+
+
+
+  
+  <title>{% block title %}{% endblock title%}TheBlogHen</title>
+  <link rel="shortcut icon" href="{% static 'gallary/image/blogHenFav.png' %}" type="image/x-icon">
+
+  </head>
+  <body>
+    
+
+    {% include 'main/newnavbar.html' %}
+
+    
+    <div class="ui container">    
+      
+      
+
+    {% block content %}
+    {% endblock content %}
+    </div>
+
+
+
+    {% include 'main/footer.html' %}
+
+    
+
+    {% block scripts %}
+    {% endblock scripts %}
+
+
+
+
+   
+   <!--Custom js ADD-->
+
+   <script src="{% static 'gallary/js/jquery.js'%}"></script>
+   <script src="{% static 'gallary/js/bootstrap.js'%}"></script>
+   <script src="{% static 'gallary/js/popper.js'%}"></script>
+   <script src="{% static 'gallary/js/main.js'%}"></script>
+   
+
+  </body>
+
+</html>

@@ -1,0 +1,544 @@
+{% extends 'base.html' %}
+
+
+
+{% block meta %}
+<meta name="keywords" content="{{keywords}}">
+<meta name="description" content="{{post.title}}">
+<meta name="description" content="{{contentDes}}">
+
+{% endblock meta %}
+
+
+
+
+{% block title %}{{post.title}}-{% endblock title%}
+{% block content %}
+
+<style>
+  .content-box{
+    max-height: 500px;
+    overflow-y: scroll;
+    
+  }
+
+
+
+  @media all and (max-width:1198px){
+
+  .width{
+
+    margin: 4px 5px 5px 0px !important;  
+
+
+  }
+  }
+
+    @media all and (max-width:990px){
+
+      .sharemobile{
+        width: 30%;
+        margin: 4px 5px 5px 0px !important;  
+
+
+      }
+    }
+
+    @media all and (max-width:718px){
+
+      .sharemobile{
+        width: 30%;
+        margin: 4px 5px 5px 0px !important;  
+
+ 
+
+      }
+    }
+      
+    @media all and (max-width:618px){
+
+      .sharemobile{
+        width: 32%;
+        margin: 4px 5px 5px 0px !important;  
+
+ 
+
+      }
+    }
+    @media all and (max-width:547px){
+
+      .sharemobile{
+        width: 30%;
+        margin: 4px 5px 5px 0px !important;  
+
+
+      }
+
+    }
+
+    @media all and (max-width:425px){
+
+    .card-img-bottom{
+      height: 230px;
+      width: 100%;
+
+    }
+
+    .likemobile{
+      width: 45%;
+      margin: 4px 5px 5px 12px !important;       
+
+    }
+
+    .likemobile2{
+      width: 100%;
+    }
+
+    .commentmobile{
+      width: 45%;
+    }
+    .commentmobile2{
+      width: 100%;
+    }
+    .translatemobile{
+
+      width: 45%;
+      margin: 4px 5px 5px 12px !important;   
+
+
+    }
+    .sharemobile{
+      width: 45%;
+      margin: 4px 5px 5px 0px !important;  
+
+
+    }
+    .width{
+      width: 30%;
+    }
+    #transCard > div > a:nth-child(7) > button{
+      width: 47%;
+    }
+    #transCard > div > a:nth-child(8) > button{
+      width: 47%;
+    }
+
+
+}
+</style>
+<h1>{{post.title|urlize|safe}}</h1>
+<p>{{post.created}}</p>
+<hr />
+
+
+{% if post.image %}
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-7">
+        {% if post.image %}
+        <img
+          class="card-img-bottom"
+          height="550"
+          src="{{post.image.url}}"
+          alt=""
+        />
+        {% endif %}
+        <br>
+        <br>
+
+
+        <form
+        action="{% url 'like-unlike-post' %}"
+        method="POST"
+        class="like-form"
+        id="{{post.id}}"
+      >
+        {% csrf_token %}
+        <input
+          type="hidden"
+          id="likeId"
+          name="post_like_id"
+          value="{{post.id}}"
+        />
+        <div class="ui labeled button likemobile " tabindex="0">
+          <button class="ui red button like-btn{{post.id}} likemobile2 " type="submit">
+            <!-- <i class="heart icon"></i> -->
+
+            {% if request.user not in post.liked.all %} Like {% else %} Unlike
+            {% endif %}
+          </button>
+          <a
+            id="likesCount"
+            class="ui basic red left pointing label like-count{{post.id}} likemobile2"
+          >
+            {{post.num_likes}}
+          </a>
+        </div>
+
+        <div class="ui labeled button commentmobile" tabindex="0">
+          <div class="ui basic blue button commentmobile2">
+            <i class="comment icon"></i>
+          </div>
+          <a id="comCount{{post.id}}" class="ui basic left pointing blue label commentmobile2 ">
+            {{post.CommentCount}}
+          </a>
+        </div>
+        {% if post.content %}
+
+        <input
+        
+          type="button"
+          class="ui button translatemobile"
+          name="postReading"
+          id="readpost"
+          value="Translate"
+        />
+        {% endif %}
+
+
+        <button
+        
+          type="button"
+          class="btn btn-info sharemobile "
+          name="postshare"
+          id="sharepost">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+            <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+          </svg><i class="bi bi-share"></i>&nbsp;&nbsp;&nbsp;Share
+      </button>
+      </form>    
+      {% include 'share.html' %}
+      {% include 'translate.html' %}   
+      </div>
+
+      <div class="col-sm-5">
+        <div class="content-box">
+          {% if post.CommentCount %}
+          {% for com in post.comment_set.all %}
+          <div class="card" id="card{{com.id}}" >
+            <div class="card-body">
+              <span >{{com.user}} said</span>:
+              &nbsp;<b>{{com.body}}</b>&nbsp;&nbsp;on&nbsp;
+              {{com.created}}
+              
+              {% if request.user == com.user or request.user.is_staff %}
+              <form class="btn-del" id="{{com.id}}" pst ='{{post.id}}' method="POST">
+                {% csrf_token %}
+              <button  class="ui black button " type="submit" >Delete</button>
+            </form>
+              {% endif %}
+
+            </div>
+          </div>
+          <br />
+          {% endfor %}
+          {% else %}
+          <p class="text-center">No Commnets</p>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+    <br>
+    <br>
+    <form  id="{{post.id}}" action="{% url 'save-comment' post.id post.title|slugify %}" method="POST"class='ui form commForm2' >
+      {% csrf_token %}
+      <input placeholder="Add Your Comment" class="post_id" type="text" name="post_id" id="in{{post.id}}">
+      <br>
+      <br>
+
+      <button type="submit" name="submit_c_form_single" class="ui primary button">Add Comment Publicly</button>
+  </form>
+  </div>
+</div>
+<br />
+<br />
+
+<style>
+  .contentControl::first-letter {
+    font-size: xx-large;
+    
+  }
+  .contentControl{
+      font-size: 18px;
+      text-align: justify;
+
+  }
+
+</style>
+
+
+<div class="contentControl">
+
+
+
+  {% if post.image1 and post.image2 and post.image3%}
+
+  <p >{{post.content|slice:3001|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image1.url}}"
+  alt=""
+/>
+  <p >{{post.content|slice:'3001:4002'|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image2.url}}"
+  alt=""
+/>
+  <p >{{post.content|slice:'4002:5003'|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image3.url}}"
+  alt=""
+/>
+<p >{{post.content|slice:'5003:'|safe|urlize}}</p>
+
+
+  {% elif post.image1 and post.image2 %}
+
+  <p >{{post.content|slice:3001|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image1.url}}"
+  alt=""
+/>
+  <p >{{post.content|slice:'3001:4002'|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image2.url}}"
+  alt=""
+/>
+  <p >{{post.content|slice:'4002:'|safe|urlize}}</p>
+
+  {% elif post.image2 and post.image3 %}
+
+  <p >{{post.content|slice:3001|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image2.url}}"
+  alt=""
+/>
+  <p >{{post.content|slice:'3001:4002'|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image3.url}}"
+  alt=""
+/>
+  <p >{{post.content|slice:'4002:'|safe|urlize}}</p>
+
+  {% elif post.image1 and post.image3 %}
+
+  <p >{{post.content|slice:3001|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image1.url}}"
+  alt=""
+/>
+  <p >{{post.content|slice:'3001:4002'|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image3.url}}"
+  alt=""
+/>
+  <p >{{post.content|slice:'4002:'|safe|urlize}}</p>
+
+  {% elif post.image1 %}
+  <p >{{post.content|slice:3001|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image1.url}}"
+  alt=""
+/>
+  <p>{{post.content|slice:'3001:'|safe|urlize}}</p>
+
+  {% elif post.image2 %}
+  <p>{{post.content|slice:3001|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image2.url}}"
+  alt=""
+/>
+  <p>{{post.content|slice:'3001:'|safe|urlize}}</p>
+
+  {% elif post.image3 %}
+  <p>{{post.content|slice:3001|safe|urlize}}</p>
+  <img
+  class="card-img-bottom"
+  height="550"
+  src="{{post.image3.url}}"
+  alt=""
+/>
+  <p>{{post.content|slice:'3001:'|safe|urlize}}</p>
+
+
+  {% else %}
+  <p>{{post.content|safe|urlize}}</p>
+
+  {% endif %}
+
+</div>
+
+
+
+
+
+<!-- ----------------------------------------------- -->
+
+{% else %}
+
+<style>
+  .contentControl::first-letter {
+    font-size: xx-large;
+    
+  }
+  .contentControl{
+      font-size: 18px;
+      text-align: justify;
+
+  }
+
+</style>
+
+
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-7">
+
+        <div class="contentControl">
+          <p>{{post.content|safe|urlize}}</p>
+
+          
+        </div>
+        <br>
+        <form
+        action="{% url 'like-unlike-post' %}"
+        method="POST"
+        class="like-form"
+        id="{{post.id}}"
+      >
+        {% csrf_token %}
+        <input
+          type="hidden"
+          id="likeId"
+          name="post_like_id"
+          value="{{post.id}}"
+        />
+        <div class="ui labeled button likemobile" tabindex="0">
+          <button class="ui red button like-btn{{post.id}} likemobile2" type="submit">
+            <!-- <i class="heart icon"></i> -->
+
+            {% if request.user not in post.liked.all %} Like {% else %} Unlike
+            {% endif %}
+          </button>
+          <a
+            id="likesCount"
+            class="ui basic red left pointing label like-count{{post.id}} likemobile"
+          >
+            {{post.num_likes}}
+          </a>
+        </div>
+
+        <div class="ui labeled button commentmobile" tabindex="0">
+          <div class="ui basic blue button commentmobile2">
+            <i class="comment icon"></i>
+          </div>
+          <a id="comCount{{post.id}}" class="ui basic left pointing blue label commentmobile2">
+            {{post.CommentCount}}
+          </a>
+        </div>
+        {% if post.content %}
+        <input
+        
+          type="button"
+          class="ui button translatemobile"
+          name="postReading"
+          id="readpost"
+          value="Translate"
+        />
+    
+        {% endif %}
+        <button
+        
+          type="button"
+          class="btn btn-info sharemobile"
+          name="postshare"
+          id="sharepost">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+            <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+          </svg><i class="bi bi-share"></i>&nbsp;&nbsp;&nbsp;Share
+      </button>
+    </form>
+    {% include 'share.html' %}
+    {% include 'translate.html' %}      
+    </div>
+
+    <div class="col-sm-5">
+      <div class="content-box">
+        {% if post.CommentCount %}
+        {% for com in post.comment_set.all %}
+        <div class="card" id="card{{com.id}}" >
+          <div class="card-body">
+            <span >{{com.user}} said</span>:
+            &nbsp;<b>{{com.body}}</b>&nbsp;&nbsp;on&nbsp;
+            {{com.created}}
+            {% if request.user == com.user or request.user.is_staff %}
+            <form class="btn-del" id="{{com.id}}" pst ='{{post.id}}' method="POST">
+              {% csrf_token %}
+            <button  class="ui black button " type="submit" >Delete</button>
+          </form>
+            {% endif %}
+          </div>
+        </div>
+        <br />
+        {% endfor %}
+        {% else %}
+        <p class="text-center">No Commnets</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+
+      <form  id="{{post.id}}" action="{% url 'save-comment' post.id post.title|slugify %}" method="POST"class='ui form commForm2' >
+        {% csrf_token %}
+        <input placeholder="Add Your Comment" class="post_id" type="text" name="post_id" id="in{{post.id}}">
+        <br>
+        <br>
+  
+        <button type="submit" name="submit_c_form_single" class="ui primary button">Add Comment Publicly</button>
+    </form>
+    </div>
+        </div>
+        </div>
+
+
+{% endif %}
+
+<br>
+<br>
+<br>
+<br>
+<br>
+{% include 'ajax.html' %}
+{% include 'relatedPost.html' %}
+
+
+<a  id="ErrorLogin"><input type="hidden" id="ErrorbtnLogin"></input></a>
+{% endblock content %}
+

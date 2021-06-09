@@ -1,0 +1,76 @@
+
+
+<div style="display: none" class="ui container" id="create_category">
+  <h3>Create A New Category</h3>
+  <form
+    class="ui form"
+    id="save_category"
+    action="{% url 'save-category' %}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %}
+    <div id="form_category">{{category_form.as_p}}</div>
+    <br />
+
+    <button class="ui basic blue button" type="submit">Create Category</button>
+  </form>
+  <br>
+  <br>
+
+</div>
+
+
+
+<div class="card" >
+  <div class="card-body">
+
+    <h2 class="card-title">Category <span id="catname"></span> </h2>
+
+    <hr />
+    <div class="allcat">
+
+    {% for i in catagorys %} {% if i.image %}
+    {% if i.name == 'Videos' %}
+    <a href="videos/allvideos/">
+    {% else %}
+
+    <a href="{% url 'catagory-post' i.id i.name %}">
+      {% endif %}
+      
+      <img
+
+      class="rounded-circle catimg"
+      src="{{i.image.url}}"
+      alt="{{i.name}}"
+      height="70px"
+      width="70px"
+      
+    /></a>
+
+
+
+    {% endif %} {% endfor %}
+  </div>
+ 
+    <br>
+
+  </div>
+</div>
+
+<script>
+
+  $('.rounded-circle').mouseover(function(){
+    name = $(this).attr('alt')
+    document.getElementById('catname').innerHTML = ':'+name
+
+  })
+  $('.rounded-circle').mouseleave(function(){
+    name = $(this).attr('alt')
+    document.getElementById('catname').innerHTML = ''
+
+  })
+
+
+
+</script>

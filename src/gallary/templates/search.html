@@ -1,0 +1,24 @@
+<form  id="{{post.id}}" action="{% url 'save-comment' post.id post.title|slugify %}" method="POST"class='ui form commForm2' >
+    {% csrf_token %}
+    <input class="post_id" type="hidden" name="post_id" value={{post.id}}>
+    {{ c_form }}
+    <button type="submit" name="submit_c_form" class="ui primary button">Add Comment Publicly</button>
+</form>
+
+<div>
+
+
+    if 'submit_c_form_single' in request.POST:
+    pk = request.POST.get('post_id')
+    obj = images.objects.get(id=pk)
+    c_form = CommentModelForm()
+    context ={
+    
+        'post':obj,
+        'c_form':c_form,
+    
+        
+    }
+    return render(request,'singlePost.html',context)
+
+</div>

@@ -1,0 +1,154 @@
+{% url 'newsfeed' as path_to_newsfeed %}
+{% url 'newsfeed2' as path_to_newsfeed2 %}
+
+{% url 'my-videos' as path_to_allvideos %}
+{% url 'terms-and-condition' as path_to_terms %}
+{% url 'about' as path_to_about %}
+{% url 'admin-and-users' as path_to_admin %}
+{% url 'all-post' as path_to_allposts %}
+{% url 'account_login' as path_to_login %}
+{% url 'account_logout' as path_to_logout %}
+
+<style>
+  .searchBox{
+    margin-right: 100px;
+  }
+  .navbar{
+    padding: 10px 0px 10px 0px;
+  }
+  .nav-link{
+    font-size: large;
+    margin-right: 5px;  
+    }
+</style>
+
+
+
+
+<nav class="navbar navbar-expand-lg nnavbar navbar navbar-dark bg-dark" >
+  <div class="container-fluid">
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_newsfeed %}active{%endif%}" aria-current="page" href="{% url 'newsfeed' %}">Home</a>
+        </li>
+
+
+
+        <li class="nav-item">
+          <a     class="nav-link {% if request.path == path_to_about %}active{%endif%}"  href="{% url 'about' %}">About</a>
+        </li>
+        {% if request.user.is_staff %}   
+        <li class="nav-item">
+          <a     class="nav-link {% if request.path == path_to_allvideos %}active{%endif%}" href="{% url 'my-videos' %}">Videos</a>
+        </li>
+        {% endif %}
+
+
+        <li class="nav-item">
+          {% if request.user.is_staff %}
+          <a     class="nav-link {% if request.path == path_to_allposts %}active{%endif%}" href="{% url 'all-post' %}">
+            All Posts
+          </a>
+          {% endif %}
+        </li>
+
+
+        <li class="nav-item">
+
+          {% if request.user.is_staff %}
+          <a     class="nav-link {% if request.path == path_to_admin %}active{%endif%}" href="{% url 'admin-and-users' %}" class="item">
+            Admins
+          </a>
+          {% endif %}
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_terms %}active{%endif%}" href="{% url 'terms-and-condition' %}">Terms and Conditions</a>
+        </li>
+
+
+        {% if request.path ==  path_to_newsfeed %}
+        {% if request.user.is_staff %}        
+
+          <button id="plus" class="btn btn-primary mx-3 my-1" ><i id="icon" class="plus icon"></i>Add Post</button>
+          
+
+        {% endif %}
+        {% endif %}
+
+        {% if request.path ==  path_to_newsfeed %}
+        {% if request.user.is_staff %}        
+
+          <button id="plusCat" class="btn btn-primary  mx-3 my-1" ><i id="iconCat" class="plus icon"></i>Add Category</button>
+          
+
+        {% endif %}
+        {% endif %}
+
+        {% if request.path ==  path_to_allvideos %}
+        {% if request.user.is_staff %}        
+
+          <button id="plusVdo" class="btn btn-primary  mx-3 my-1" ><i id="iconVdo" class="plus icon"></i>Add Videos</button>
+          
+
+        {% endif %}
+        {% endif %}
+
+
+
+        </ul>
+
+      {% if request.path == path_to_about or  request.path == path_to_allvideos or request.path == path_to_terms%}
+
+      {% elif request.path == path_to_allposts%}
+      <form id="seacrchForm"  class="d-flex searchBox ui input" method="GET">
+
+          {{myfilter.form.title}}     
+          <button class="ui button" type="submit">Search</button>
+
+      </form> 
+      {% else %}
+
+
+      <form id="seacrchForm"  class="d-flex searchBox ui input" method="GET"
+      action="{% url 'newsfeed' %}">
+
+          {{myfilter.form.title}}     
+          <button class="ui button" type="submit">Search</button>
+
+      </form> 
+      {% endif %}
+
+      <ul class="nav navbar-nav navbar-right ">
+        {% if request.user.is_authenticated %}
+          <li class="nav-link">{{request.user}} </li>
+    
+        <a href="{% url 'account_logout' %}"  class="nav-link {% if request.path == path_to_logout %}active{%endif%}">
+         Log out ?
+         </a>
+         {% else %}
+         <a href="{% url 'account_login' %}?next={{request.path}}" class="nav-link {% if request.path == path_to_login %}active{%endif%}">
+         Login
+         {% endif %}
+        </a>
+        </ul>
+
+    </div>
+    
+  </div>
+
+</nav>
+<br>
+<br>
+

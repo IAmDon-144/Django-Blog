@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+ {% block content %}
+ 
+ <style>
+     .card:hover{
+         background-color:rgba(3, 180, 224, 0.562);
+     }
+
+ </style>
+ 
+ 
+ {% for post in allPosts %}
+
+<div class="card">
+  <div class="card-body">
+
+    <div class="row">
+      <div class="col-sm-6">
+        <a href="{% url 'post-reading' post.id post.title|slugify %}"><h3>{{post.title|slice:35}}...</h3></a>
+        <br>
+        Created:
+        <span style="font-size: 17px; font-weight: bold; color: blue"
+          >{{post.created}}</span
+        >
+      </div>
+      <div class="col-sm-3">
+        <p style="font-weight: bold;font-size: 17px;">Total Likes:{{post.num_likes}}</p>
+        <p style="font-weight: bold;font-size: 17px;">Total Comments:{{post.CommentCount}}</p>
+
+      </div>
+      <div class="col-sm-3">
+        <a href="{% url 'update-post' post.id%}"><button class="btn btn-primary">Edit</button></a>
+        <a href="{% url 'delete-post' post.id %}"><button class="btn btn-danger">Delete</button></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+<br />
+
+
+{% endfor %} {% endblock content %}

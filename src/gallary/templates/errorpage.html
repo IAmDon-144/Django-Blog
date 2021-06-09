@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+ {% block content %}
+
+<h2>An Error Occurred </h2>
+The home page can't get all the posts because of an issue. Try again sometimes later
+
+<br>
+<br>
+<br>
+<a href="{% url 'terms-and-condition'  %}"><p>Why This Error?</p></a>
+<br>
+<a href="{% url 'all-post'  %}"><p>Fix This Error </p></a>
+<br>
+<a href="{% url 'newsfeed'  %}"><p>Try Again to Go Home</p></a>
+<br>
+ {% endblock content %}
+ 

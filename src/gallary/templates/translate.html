@@ -1,0 +1,56 @@
+<br>
+
+
+<style>
+
+    .width{
+        font-size: 13px;
+        margin:0px 1px 0px 1px;
+    }
+</style>
+
+<div style="display: none" class="card" id="transCard">
+    <div class="card-body">
+
+        {% if article_lang == 'Bangla' %}   
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'ar' %}"><button class="btn btn-primary width">العربية</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'en' %}"><button class="btn btn-primary width">English</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'es' %}"><button class="btn btn-primary width">Español</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'hi' %}"><button class="btn btn-primary width">हिंदी</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'ur' %}"><button class="btn btn-primary width">اردو</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'zh-CN' %}"><button class="btn btn-primary width">普通话</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'pt' %}"><button class="btn btn-primary width">português</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'de' %}"><button class="btn btn-primary width">Deutsche</button></a>
+
+
+        {% else %}
+        
+        <a href="{% url 'post-translate' post.id post.title|slugify 'ar' %}"><button class="btn btn-primary width">العربية</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'bn' %}"><button class="btn btn-primary width">বাংলা</button></a>
+
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'es' %}"><button class="btn btn-primary width">Español</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'hi' %}"><button class="btn btn-primary width">हिंदी</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'ur' %}"><button class="btn btn-primary width">اردو</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'zh-CN' %}"><button class="btn btn-primary width">普通话</button></a>
+
+        <a href="{% url 'post-translate' post.id post.title|slugify 'pt' %}"><button class="btn btn-primary width">português</button></a>
+        
+        <a href="{% url 'post-translate' post.id post.title|slugify 'de' %}"><button class="btn btn-primary width">Deutsche</button></a>
+
+        {% endif %}
+    </div>
+</div>
+<br>

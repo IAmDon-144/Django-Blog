@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+
+        <h1>Are You Sure to Delete '{{post.title}}'?</h1>
+        <div class="row">
+        {% if post.image %}
+        <div class="col-sm-3">
+            <img src="{{post.image.url}}" alt="" height="100px" width="200px">
+            
+        </div>
+        {% endif %}
+        
+
+
+    <div class="col-sm-6">
+    <form id="deleteform" action="" method="POST">
+        {% csrf_token %}
+    <a href="{% url 'delete-post' post.id %}"><button name="confirm_delete_btn" class="btn btn-danger" type="submit">Yes! Delete It</button></a>
+    <button id="keepBtn" class="btn btn-info" type="submit">No,Keep it</button>
+    </div>
+</form>
+
+    </div>
+    
+</div>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        document.getElementById('keepBtn').addEventListener('click',()=>{
+
+            document.getElementById('deleteform').action = "{% url 'newsfeed' %}"
+
+        })
+    })
+
+
+</script>
+
+{% endblock content %}

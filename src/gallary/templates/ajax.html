@@ -1,0 +1,245 @@
+
+{% block scripts%}
+
+
+<!-- -------------------------------LikeUnlike--------------- -->
+<script>
+  $(document).ready(function () {
+    $(".like-form").submit(function (e) {
+      e.preventDefault();
+      const post_id = $(this).attr("id");
+      const likeText = $(`.like-btn${post_id}`).text();
+      let res;
+      const trim = $.trim(likeText);
+      const likes = $(`.like-count${post_id}`).text();
+      const likesTrim = $.trim(likes);
+      let intLikes = parseInt(likesTrim);
+      const url = $(this).attr("action");
+
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+          csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+          post_id: post_id,
+        },
+        success: function (response) {
+          if (trim === "Unlike") {
+            $(`.like-btn${post_id}`).text("Like");
+            res = intLikes - 1;
+          } else {
+            $(`.like-btn${post_id}`).text("Unlike");
+            res = intLikes + 1;
+          }
+          $(`.like-count${post_id}`).text(res);
+
+        },
+        error: function (response) {
+
+          $('#ErrorLogin').attr("href","{% url 'account_login' %}?next={{request.path}}" )
+          '{% if request.user.is_authenticated %}'
+          '{% else %}'
+          $('#ErrorbtnLogin').click()
+          '{% endif %}'
+
+        },
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+    $("#plus").click(function () {
+      $("#create_post").toggle(150);
+      $('html,body').scrollTop(0);
+
+      $("#icon").toggleClass('minus icon')
+      $("#icon").toggleClass('plus icon')
+
+
+    });
+  });
+</script>
+
+
+<script>
+  $(document).ready(function () {
+    $("#plusCat").click(function () {
+      $("#create_category").toggle(150);
+      $('html,body').scrollTop(0);
+
+      $("#iconCat").toggleClass('minus icon')
+      $("#iconCat").toggleClass('plus icon')
+
+
+    });
+  });
+</script>
+
+
+
+
+
+
+<!-- ------------------------Comment----------------------- -->
+<script>
+
+  $(document).ready(function(){
+
+    $('.commForm2').submit(function(e){
+      output =''
+      e.preventDefault()
+      let form = $(this).attr('id')
+      let body = document.getElementById(`in${form}`).value
+      let commentCountText = document.getElementById(`comCount${form}`)
+      let commentCount = document.getElementById(`comCount${form}`).text
+      let comNum = commentCount.trim()
+      let comNumFinal = parseInt(comNum)
+
+      console.log(comNumFinal);
+      const url = $(this).attr("action");
+      $.ajax({
+        type:'POST',
+        url: url,
+        dataType:'json',
+        data :{
+          csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+          'body':body,
+          'form':form
+        },
+        success:function(response){
+          console.log('Success');
+          if(response.status == 'ok'){
+            res = comNumFinal + 1
+            document.getElementById(`comCount${form}`).text =res
+            document.getElementById(`in${form}`).value ="";
+
+
+            x = response.zipList
+            y = response.allComments
+            
+            console.log(y);
+            let postId
+            user = response.user
+            let empList =[]
+            for(j=0;j<y.length;j++){
+
+              let comId =y[j].id
+              postId = y[j].post_id
+              empList.push(comId)            
+              
+            }
+
+
+
+ 
+            for(i=0;i<x.length;i++){
+              if(user != x[i][0]){
+                console.log(x[i][0]);
+
+                output+=
+                  '<div class="card">'+
+                    '<div class="card-body">'+
+                      '<span style="font-weight: bold">'+
+                        x[i][0]+'</span>:&nbsp;&nbsp;'+x[i][1]+                 
+                      '</div>'+
+                  '</div>'+'<br>'
+                  }
+
+              else{
+              output+=
+              '<div class="card"'+'id =card'+empList[i]+'>'+
+                '<div class="card-body"'+
+                  '<span style="font-weight: bold">'+
+                    x[i][0]+'</span>'+':&nbsp;&nbsp;'+x[i][1]+'&nbsp;&nbsp;'+'&nbsp;'+    
+                    '<form class="btn-del"'+ 'id='+empList[i]+' pst ='+postId+' method="POST">' +
+                      '{% csrf_token %}'+        
+                      '<button class="ui black button">Delete</button>'+
+                    '</form>'+
+                    
+                  '</div>'+
+              '</div>'+'<br>'
+                  }
+            }
+            $('.content-box').html(output)
+          }
+        }
+        ,error(response){
+          $('#ErrorLogin').attr("href","{% url 'account_login' %}?next={{request.path}}" )
+          '{% if request.user.is_authenticated %}'
+          '{% else %}'
+          $('#ErrorbtnLogin').click()
+          '{% endif %}'
+        }
+      })
+    })
+
+    $('.btn-del').submit(function(e){
+      e.preventDefault()
+
+      cmId = $(this).attr('id')
+      postId = $(this).attr('pst')
+      console.log(postId);
+      console.log(cmId);
+      let cardId = document.getElementById(`card${cmId}`)
+
+      const url ="{% url 'delete-comment' %}"
+      $.ajax({
+        type:'POST',
+        url:url,
+        dataType:'json',
+        data :{
+
+          'cmId':cmId,
+          'postId':postId
+        },
+        success:function(response){
+          console.log('Success');
+          $(cardId).fadeOut()
+        },error:function(response){
+          console.log('Error',response);
+        }
+
+      })
+
+    })
+    
+  })
+</script>
+  
+<script>
+  $('#readpost').click(function(){ 
+
+
+    console.log('Clicked');
+    $('#transCard').toggle(100)
+
+
+
+
+
+  })
+</script>
+
+
+<script>
+
+
+  $('#sharepost').click(function(){
+
+    let url = window.location.href
+    console.log(url);
+    $('#shareId').val(url)
+    $('#shareCard').toggle(100)
+
+
+    
+  })
+</script>
+{% endblock scripts%}

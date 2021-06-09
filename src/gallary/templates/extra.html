@@ -1,0 +1,135 @@
+<script>
+
+  $(document).ready(function(){
+    
+  })
+  $('.content-box').on('click','.btn-del',function(){
+    let comId = $(this).attr('id')
+    let postId = $(this).attr('pst')
+    let cardId = document.getElementById(`card${postId}`)
+    let comThis = this;
+    console.log(cardId);
+    mydata ={
+      'comId':comId,
+      'postId':postId,
+      csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+    };
+
+    $.ajax({
+    url: "{% url 'delete-comment' %}",
+    method: "POST",
+    data: mydata,
+    dataType: "json",
+    success:function(response){
+      console.log('Success');
+      $(cardId).fadeOut()
+
+
+    },error(response){
+      console.log('Error',response);
+    }
+
+
+    })
+  })
+
+
+
+</script>
+
+<script>
+
+
+const msg = new SpeechSynthesisUtterance();
+
+   
+dropDownMenu = 
+'<select class="ui fluid dropdown" name="voice" id="voices">'   
+    +'<option value="">Select A Voice</option>'+
+'</select>'
+
+$('#voiceDrpDown').html(dropDownMenu)
+let voices = [];
+const voicesDropdown = document.querySelector('[name="voice"]');
+const options = document.querySelectorAll('[type="range"], [name="text"]');
+let mainText = '{{post.content|linebreaks}}'
+let maintext2 = mainText.replaceAll('<br>','.')
+let mainText3 = maintext2.replaceAll('<p>','')
+let mainText4 = mainText3.replaceAll('</p>','')
+msg.text = mainText4
+
+speechSynthesis.speak(msg);
+console.log('Iam');
+
+
+
+function toggle(){
+  
+  speechSynthesis.speak(msg);
+  console.log('Iam');
+}
+
+function populatedVoices(){
+  voices = this.getVoices();
+//   console.log(voices);
+  const voiceOptions = voices
+  .map(voice =>`<option value = "${voice.name}"> ${voice.name} (${voice.lang})</option>`)
+  .join('')
+  voicesDropdown.innerHTML = voiceOptions;
+
+}
+
+function setVoices(){
+
+msg.voice = voices.find(voice => voice.name === this.value);
+toggle()
+}
+
+function setOption(){
+  msg[this.name] = [this.value]
+  toggle()
+}
+speechSynthesis.addEventListener('voiceschanged',populatedVoices);
+voicesDropdown.addEventListener('change',setVoices)
+options.forEach(option =>option.addEventListener('change',setOption))
+</script>
+
+let valueName = $(this).attr('value')
+
+    var utterThis  = new SpeechSynthesisUtterance();
+
+    if(valueName == 'Read'){
+
+      let mainText = '{{post.content|linebreaks}}'
+      let maintext2 = mainText.replaceAll('<br>','.')
+      let mainText3 = maintext2.replaceAll('<p>','')
+      let mainText4 = mainText3.replaceAll('</p>','')
+      utterThis.text = mainText4
+
+
+      speechSynthesis.speak(utterThis);
+      $('#readpost').val('Stop')
+
+    }
+
+    if(valueName == 'Stop'){
+      speechSynthesis.cancel()
+      $('#readpost').val('Read')
+    }
+
+    utterThis.addEventListener('end',function(event){
+      $('#readpost').val('Read')
+    })
+
+    function resumeInfinity() {
+    window.speechSynthesis.resume();
+    timeoutResumeInfinity = setTimeout(resumeInfinity, 1000);
+  }
+  utterThis.onstart = function(event) {
+    resumeInfinity();
+  };
+
+  utterThis.onend = function(event) {
+      clearTimeout(timeoutResumeInfinity);
+  };
+

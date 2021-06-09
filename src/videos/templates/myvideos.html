@@ -1,0 +1,110 @@
+{% extends 'base.html' %} 
+
+{% load embed_video_tags %}
+
+<title>{% block title %}{{vdo.title}}- From YouTube-{% endblock title%}</title>
+
+{% block content %}
+
+<style>
+
+  body{
+    background: #181818;
+    color: white;
+  }
+  .card{
+    color: #181818;
+  }
+  .allvdos{
+    overflow-y: scroll;
+  }
+  .cardvdo:hover {
+    background: #909090;
+    text-decoration: none;
+    color:#FFF;
+
+    
+    
+  }
+
+  @media only screen and (max-width: 425px) {
+
+    .allvdos{
+      display: none;
+    }
+  }
+
+</style>
+
+
+<div class="card">
+  <div class="card-body">
+      <div class="row">
+
+
+    <div class="col-sm-8">
+
+      <h1>{{vdo.title}}</h1>
+      <div class="ratio ratio-16x9">
+        <iframe
+          src="{{vdo.video}}"
+          title="YouTube video"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+    </div>
+    <div class="col-sm-4 allvdos">
+
+      <a href="">
+        <div  class="card ">
+        <div class="card-item mx-3 mt-2">
+
+          <h3>{{vdo.title|slice:15}}</h3>
+          <span>Currently Playing....</span>
+
+          <p class="my-3" style="text-align: justify;">{{vdo.content|slice:50}}..</p>
+        </div>
+      </div>
+    </a>
+
+      <br>
+
+      {% for vdoall in vdos %}
+      <a href="{% url 'single-video' vdoall.id vdoall.title|slugify %}">
+
+      <div  class="card cardvdo ">
+        <div class="card-item mx-3 my-2">
+          <h3 class="whitedes">{{vdoall.title|slice:15}}</h3>
+          <p class="whitedes" style="text-align: justify;">{{vdoall.content|slice:100}}..</p>
+
+        </div>
+      </div>
+      <br>
+
+    </a>
+
+      {% endfor %}
+    </div>
+</div>
+
+
+
+
+  </div>
+
+  
+</div>
+<br>
+<br>
+<br>
+<p style="text-align: justify;">{{vdo.content|urlize|linebreaksbr}}</p>
+<br>
+
+
+
+
+
+
+{% endblock content %}
+
